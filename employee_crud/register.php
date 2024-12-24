@@ -7,9 +7,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password
-    $role = 'standard'; // Default role for all users is 'standard'
+    $gender = mysqli_real_escape_string($conn, $_POST['gender']);
+    $date_of_birth = mysqli_real_escape_string($conn, $_POST['date_of_birth']);
+    $role = 'user'; // Default role for all users is 'user' so no one can accidentally become admin
 
-    $query = "INSERT INTO users (name, email, password, role) VALUES ('$name', '$email', '$password', '$role')";
+    $query = "INSERT INTO users (name, email, password, gender, date_of_birth, role) VALUES ('$name', '$email', '$password', '$gender', '$date_of_birth', '$role')";
     if ($conn->query($query)) {
         echo "<script>alert('Registration successful!'); window.location='login.php';</script>";
     } else {
@@ -33,8 +35,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label for="password" class="form-label">Password</label>
             <input type="password" id="password" name="password" class="form-control" required>
         </div>
+        <div class="mb-3">
+            <label for="gender" class="form-label">Gender</label>
+            <select id="gender" name="gender" class="form-select" required>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="date_of_birth" class="form-label">Date of Birth</label>
+            <input type="date" id="date_of_birth" name="date_of_birth" class="form-control" required>
+        </div>
         <button type="submit" class="btn btn-primary">Register</button>
-        <a href="login.php" class="btn btn-link">Not a New User?</a>
+        <a href="register.php" class="btn btn-link">Not a New User?</a>
     </form>
 </div>
 
