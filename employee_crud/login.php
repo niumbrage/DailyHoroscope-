@@ -7,7 +7,7 @@ if (isset($_POST['login'])) {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = $_POST['password'];
 
-    $query = "SELECT * FROM employee WHERE email = '$email'";
+    $query = "SELECT * FROM users WHERE email = '$email'";
     $result = $conn->query($query);
 
     if ($result->num_rows > 0) {
@@ -15,6 +15,7 @@ if (isset($_POST['login'])) {
         if (password_verify($password, $user['password'])) {
             $_SESSION['role'] = $user['role'];
             $_SESSION['email'] = $user['email'];
+            $_SESSION['name'] = $user['name'];
             header("Location: index.php");
             exit;
         } else {
@@ -41,6 +42,7 @@ if (isset($_POST['login'])) {
             <input type="password" class="form-control" id="password" name="password" required>
         </div>
         <button type="submit" name="login" class="btn btn-primary">Login</button>
+        <a href="register.php" class="btn btn-link">Register as a User</a>
     </form>
 </div>
 
