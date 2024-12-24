@@ -7,9 +7,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password
-    $role = mysqli_real_escape_string($conn, $_POST['role']);
+    $role = 'standard'; // Default role for all users is 'standard'
 
-    $query = "INSERT INTO employee (name, email, password, role) VALUES ('$name', '$email', '$password', '$role')";
+    $query = "INSERT INTO users (name, email, password, role) VALUES ('$name', '$email', '$password', '$role')";
     if ($conn->query($query)) {
         echo "<script>alert('Registration successful!'); window.location='login.php';</script>";
     } else {
@@ -33,14 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label for="password" class="form-label">Password</label>
             <input type="password" id="password" name="password" class="form-control" required>
         </div>
-        <div class="mb-3">
-            <label for="role" class="form-label">Role</label>
-            <select id="role" name="role" class="form-select">
-                <option value="standard">Standard</option>
-                <option value="admin">Admin</option>
-            </select>
-        </div>
         <button type="submit" class="btn btn-primary">Register</button>
+        <a href="login.php" class="btn btn-link">Not a New User?</a>
     </form>
 </div>
 
