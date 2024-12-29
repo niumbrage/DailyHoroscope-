@@ -18,13 +18,22 @@ CREATE TABLE zodiac_signs (
     image VARCHAR(255) NOT NULL
 );
 
--- Create the horoscopes table
-CREATE TABLE horoscopes (
+-- Create the horoscopes tables
+CREATE TABLE daily_horoscopes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     zodiac_id INT NOT NULL,
-    daily_horoscope TEXT NOT NULL,
-    monthly_horoscope TEXT NOT NULL,
-    created_at DATE NOT NULL,
+    horoscope TEXT NOT NULL,
+    date DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (zodiac_id) REFERENCES zodiac_signs(id)
+);
+
+CREATE TABLE monthly_horoscopes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    zodiac_id INT NOT NULL,
+    horoscope TEXT NOT NULL,
+    month YEAR(4) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (zodiac_id) REFERENCES zodiac_signs(id)
 );
 
@@ -43,17 +52,30 @@ INSERT INTO zodiac_signs (name, date_range, description, image) VALUES
 ('Aquarius', 'January 20 - February 18', 'Innovative, progressive, and humanitarian.', 'assets/zodiac/aquarius.png'),
 ('Pisces', 'February 19 - March 20', 'Compassionate, artistic, and intuitive.', 'assets/zodiac/pisces.png');
 
-INSERT INTO horoscopes (zodiac_id, daily_horoscope, monthly_horoscope, created_at) VALUES
-(1, 'Today is a great day to take risks.', 'This month brings new opportunities.', CURDATE()),
-(2, 'Focus on building stability.', 'Financial growth is expected this month.', CURDATE()),
-(3, 'Be open to learning new things.', 'Your social life will flourish this month.', CURDATE()),
-(4, 'Take bold steps towards your goals.', 'Romantic endeavors are highlighted this month.', CURDATE()),
-(5, 'Prioritize self-care and relaxation.', 'Career advancements are on the horizon.', CURDATE()),
-(6, 'Your creativity will shine today.', 'Collaborative projects bring success this month.', CURDATE()),
-(7, 'Family matters may demand attention.', 'Personal growth is significant this month.', CURDATE()),
-(8, 'Trust your instincts in decision-making.', 'Travel opportunities may arise this month.', CURDATE()),
-(9, 'Clear communication is key today.', 'Financial planning yields rewards this month.', CURDATE()),
-(10, 'Stay grounded and focused.', 'Health and wellness improvements are likely this month.', CURDATE()),
-(11, 'Take time to reflect on your achievements.', 'Networking enhances career prospects this month.', CURDATE()),
-(12, 'Be adaptable to changing circumstances.', 'Exciting changes are in store this month.', CURDATE());
+INSERT INTO daily_horoscopes (zodiac_id, horoscope, date) VALUES
+(1, 'Today, Aries, you will face challenges at work. Stay focused and you will overcome them.', '2024-12-30'),
+(2, 'Taurus, today is a good day to nurture your personal relationships. Spend time with family.', '2024-12-30'),
+(3, 'Gemini, your creativity will shine today. Take on a new project or hobby.', '2024-12-30'),
+(4, 'Cancer, be careful with your emotions today. Take a step back to maintain balance.', '2024-12-30'),
+(5, 'Leo, your leadership skills are needed today. Step up and take charge of a situation.', '2024-12-30'),
+(6, 'Virgo, today is the perfect day to focus on your health and well-being.', '2024-12-30'),
+(7, 'Libra, your charm will help you make connections today. Stay open to new opportunities.', '2024-12-30'),
+(8, 'Scorpio, today will bring emotional growth. Reflect on your feelings and take action.', '2024-12-30'),
+(9, 'Sagittarius, adventure awaits you today. Go on an unexpected journey or try something new.', '2024-12-30'),
+(10, 'Capricorn, stay disciplined today. Your hard work will pay off soon.', '2024-12-30'),
+(11, 'Aquarius, today you will have innovative ideas. Trust your instincts and think outside the box.', '2024-12-30'),
+(12, 'Pisces, it''s a good day for self-reflection. Take some time to meditate or engage in creative activities.', '2024-12-30');
 
+INSERT INTO monthly_horoscopes (zodiac_id, horoscope, month) VALUES
+(1, 'Aries, this month you will experience a breakthrough in your career. Be open to new opportunities.', 202412),
+(2, 'Taurus, focus on building deeper connections with your loved ones this month. Communication is key.', 202412),
+(3, 'Gemini, this is a month for personal growth. Explore new hobbies and learn something new.', 202412),
+(4, 'Cancer, you will feel the need to take care of yourself this month. It''s a good time for self-care.', 202412), 
+(5, 'Leo, your energy will be contagious this month. Take the lead and inspire others.', 202412),
+(6, 'Virgo, your attention to detail will pay off this month, especially in your professional life.', 202412),
+(7, 'Libra, it''s a good month to focus on balance in your life. Find time for both work and relaxation.', 202412),
+(8, 'Scorpio, expect deep emotional connections this month. You may form a meaningful bond with someone.', 202412),
+(9, 'Sagittarius, this month will bring excitement. Plan an adventurous trip or take a risk.', 202412),
+(10, 'Capricorn, your ambition will drive you this month. Work hard, and success will follow.', 202412),
+(11, 'Aquarius, new ideas will flow this month. Collaborate with others to bring your visions to life.', 202412),
+(12, 'Pisces, creativity will be your strength this month. Use it to bring joy and inspiration to others.', 202412);
