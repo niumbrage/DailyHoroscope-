@@ -11,11 +11,14 @@ if (!isset($_SESSION['email'])) {
 
 // Fetch user details
 $email = $_SESSION['email'];
-$query = "SELECT name, date_of_birth FROM users WHERE email = ?";
+$query = "SELECT name, date_of_birth, role FROM users WHERE email = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
+
+// Store user role in the session
+$_SESSION['role'] = $user['role'];
 
 // Function to calculate zodiac sign
 function getZodiacSign($date_of_birth) {
@@ -57,17 +60,43 @@ function getZodiacSign($date_of_birth) {
 // Determine zodiac sign
 $zodiac_sign = getZodiacSign($user['date_of_birth']);
 
-// Fetch zodiac sign details and horoscope
+// Fetch all horoscopes for the zodiac sign, ordered by creation date
 $query = "
-    SELECT zodiac_signs.description, zodiac_signs.image, horoscopes.daily_horoscope, horoscopes.monthly_horoscope
+    SELECT horoscopes.daily_horoscope, horoscopes.monthly_horoscope, horoscopes.created_at, zodiac_signs.description, zodiac_signs.image
     FROM zodiac_signs
     JOIN horoscopes ON zodiac_signs.id = horoscopes.zodiac_id
     WHERE zodiac_signs.name = ?
+    ORDER BY horoscopes.created_at ASC
 ";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("s", $zodiac_sign);
 $stmt->execute();
-$zodiac_details = $stmt->get_result()->fetch_assoc();
+$horoscopes = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+$current_date = new DateTime();
+$daily_horoscope = null;
+$monthly_horoscope = null;
+
+// Cycle through horoscopes
+foreach ($horoscopes as $horoscope) {
+    $horoscope_date = new DateTime($horoscope['created_at']);
+    if ($current_date >= $horoscope_date) {
+        $daily_horoscope = $horoscope['daily_horoscope'];
+        $monthly_horoscope = $horoscope['monthly_horoscope'];
+    }
+}
+
+// If no matching horoscope is found, cycle back to the first
+if (!$daily_horoscope) {
+    $daily_horoscope = $horoscopes[0]['daily_horoscope'];
+    $monthly_horoscope = $horoscopes[0]['monthly_horoscope'];
+    $zodiac_description = $horoscopes[0]['description'];
+    $zodiac_image = $horoscopes[0]['image'];
+} else {
+    $zodiac_description = $horoscope['description'];
+    $zodiac_image = $horoscope['image'];
+}
+
 ?>
 
 <div class="custom-container">
@@ -76,25 +105,22 @@ $zodiac_details = $stmt->get_result()->fetch_assoc();
 
 <div class="parent-container mt-5">
     <div class="zodiac-container mt-5">
-        <h2>Your Zodiac Sign: <?= $zodiac_sign; ?></h2>
-        <?php if ($zodiac_details): ?>
-            <div class="zodiac-details mt-4">
-                <img src="<?= htmlspecialchars($zodiac_details['image']); ?>" alt="<?= htmlspecialchars($zodiac_sign); ?>" class="img-fluid" style="max-width: 200px;">
-                <p><strong>Description:</strong> <?= htmlspecialchars($zodiac_details['description']); ?></p>
-                <p><strong>Today's Horoscope:</strong> <?= htmlspecialchars($zodiac_details['daily_horoscope']); ?></p>
-                <p><strong>Monthly Horoscope:</strong> <?= htmlspecialchars($zodiac_details['monthly_horoscope']); ?></p>
-            </div>
-        <?php else: ?>
-            <p>Details for your zodiac sign are not available at the moment.</p>
-        <?php endif; ?>
+        <h2>Your Zodiac Sign: <?= htmlspecialchars($zodiac_sign); ?></h2>
+        <div class="zodiac-details mt-4">
+            <img src="<?= htmlspecialchars($zodiac_image); ?>" alt="<?= htmlspecialchars($zodiac_sign); ?>" class="img-fluid" style="max-width: 200px;">
+            <p><strong>Description:</strong> <?= htmlspecialchars($zodiac_description); ?></p>
+            <p><strong>Today's Horoscope:</strong> <?= htmlspecialchars($daily_horoscope); ?></p>
+            <p><strong>Monthly Horoscope:</strong> <?= htmlspecialchars($monthly_horoscope); ?></p>
+        </div>
     </div>
 </div>
-<div class="d-flex justify-content-between">
-                    <?php if ($_SESSION['role'] === 'admin'): ?>
-                        <a href="viewuser.php" class="btn btn-primary">Manage Users</a>
-                        <a href="add.php" class="btn btn-success">Add New User</a>
-                    <?php else: ?>
-                        <a href="viewuser.php" class="btn btn-primary">View Users</a>
-                    <?php endif; ?>
-                </div>
+
+<?php if ($_SESSION['role'] === 'admin'): ?>
+    <div class="d-flex justify-content-between">
+        <a href="viewuser.php" class="btn btn-primary">Manage Users</a>
+        <a href="add.php" class="btn btn-success">Add New User</a>
+        <a href="add_horoscope.php" class="btn btn-warning">Add New Horoscope</a>
+    </div>
+<?php endif; ?>
+
 <?php include 'templates/footer.php'; ?>
