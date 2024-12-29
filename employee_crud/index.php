@@ -70,7 +70,8 @@ $stmt->execute();
 $zodiac_details = $stmt->get_result()->fetch_assoc();
 ?>
 
-<div class="container mt-5">
+<div class="container custom-container mt-5">
+
     <h1>Welcome, <?= htmlspecialchars($user['name']); ?>!</h1>
     <h2>Your Zodiac Sign: <?= $zodiac_sign; ?></h2>
     
