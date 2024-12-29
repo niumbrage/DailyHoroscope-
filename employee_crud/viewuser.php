@@ -58,11 +58,9 @@ $result = $stmt->get_result();
         </tbody>
     </table>
     <div class="d-flex justify-content-between">
-    <a href="index.php" class="btn btn-primary">Back to Dashboard</a>
-    <?php if ($_SESSION['role'] === 'admin'): ?>
+        <a href="index.php" class="btn btn-primary">Back to Dashboard</a>
         <a href= "add.php" class="btn btn-success">Add User</a>                  
-                    <?php endif; ?>
-        </div>
+    </div>
    
 </div>
 
