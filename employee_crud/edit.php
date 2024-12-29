@@ -11,10 +11,10 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 
 // Check if an ID is provided
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+    $id = intval($_GET['id']); // Ensure the ID is an integer
 
     // Fetch user data
-    $stmt = $conn->prepare("SELECT * FROM employee WHERE id = ?");
+    $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -33,12 +33,13 @@ if (isset($_GET['id'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['name'];
     $email = $_POST['email'];
-    $emp_desc = $_POST['emp_desc'];
+    $gender = $_POST['gender'];
+    $date_of_birth = $_POST['date_of_birth'];
     $role = $_POST['role'];
 
     // Update user information
-    $stmt = $conn->prepare("UPDATE employee SET name = ?, email = ?, emp_desc = ?, role = ? WHERE id = ?");
-    $stmt->bind_param("ssssi", $name, $email, $emp_desc, $role, $id);
+    $stmt = $conn->prepare("UPDATE users SET name = ?, email = ?, gender = ?, date_of_birth = ?, role = ? WHERE id = ?");
+    $stmt->bind_param("sssssi", $name, $email, $gender, $date_of_birth, $role, $id);
 
     if ($stmt->execute()) {
         echo "<script>alert('User updated successfully'); window.location='viewuser.php';</script>";
@@ -60,13 +61,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="email" name="email" id="email" class="form-control" value="<?= htmlspecialchars($user['email']); ?>" required>
         </div>
         <div class="mb-3">
-            <label for="emp_desc" class="form-label">Description</label>
-            <textarea name="emp_desc" id="emp_desc" class="form-control" rows="4"><?= htmlspecialchars($user['emp_desc']); ?></textarea>
+            <label for="gender" class="form-label">Gender</label>
+            <select id="gender" name="gender" class="form-select" required>
+                <option value="Male" <?= $user['gender'] === 'Male' ? 'selected' : ''; ?>>Male</option>
+                <option value="Female" <?= $user['gender'] === 'Female' ? 'selected' : ''; ?>>Female</option>
+                <option value="Other" <?= $user['gender'] === 'Other' ? 'selected' : ''; ?>>Other</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="date_of_birth" class="form-label">Date of Birth</label>
+            <input type="date" id="date_of_birth" name="date_of_birth" class="form-control" value="<?= htmlspecialchars($user['date_of_birth']); ?>" required>
         </div>
         <div class="mb-3">
             <label for="role" class="form-label">Role</label>
             <select name="role" id="role" class="form-select">
-                <option value="standard" <?= $user['role'] === 'standard' ? 'selected' : ''; ?>>Standard</option>
+                <option value="standard" <?= $user['role'] === 'user' ? 'selected' : ''; ?>>User</option>
                 <option value="admin" <?= $user['role'] === 'admin' ? 'selected' : ''; ?>>Admin</option>
             </select>
         </div>

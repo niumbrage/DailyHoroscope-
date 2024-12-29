@@ -10,7 +10,7 @@ if ($_SESSION['role'] !== 'admin') {
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
-    $query = "DELETE FROM employee WHERE id = $id";
+    $query = "DELETE FROM users WHERE id = $id";
     if ($conn->query($query)) {
         echo "<script>alert('User deleted successfully'); window.location='viewuser.php';</script>";
     } else {
@@ -24,4 +24,7 @@ if (isset($_GET['id'])) {
     <p>User has been deleted. <a href="viewuser.php">Go back to user list</a>.</p>
 </div>
 
-<?php include 'templates/footer.php'; ?>
+<div class="parent-container mt-5">
+
+</div>
+

@@ -89,5 +89,12 @@ $zodiac_details = $stmt->get_result()->fetch_assoc();
         <?php endif; ?>
     </div>
 </div>
-
+<div class="d-flex justify-content-between">
+                    <?php if ($_SESSION['role'] === 'admin'): ?>
+                        <a href="viewuser.php" class="btn btn-primary">Manage Users</a>
+                        <a href="add.php" class="btn btn-success">Add New User</a>
+                    <?php else: ?>
+                        <a href="viewuser.php" class="btn btn-primary">View Users</a>
+                    <?php endif; ?>
+                </div>
 <?php include 'templates/footer.php'; ?>

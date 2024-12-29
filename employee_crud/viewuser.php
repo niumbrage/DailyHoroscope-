@@ -9,11 +9,12 @@ if (!isset($_SESSION['role'])) {
 }
 
 // Fetch all users
-$stmt = $conn->prepare("SELECT id, name, email, emp_desc, role FROM employee");
+$stmt = $conn->prepare("SELECT id, name, email, gender, date_of_birth, role FROM users");
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
-
+<div class="parent-container mt-5">
+</div>
 <div class="container mt-5">
     <h1>User Management</h1>
     <div class="text-end mb-3">
@@ -25,9 +26,11 @@ $result = $stmt->get_result();
                 <th>ID</th>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Description</th>
-                <th>Role</th>
+                <th>Gender</th>
+                <th>Date of Birth</th>
+                
                 <?php if ($_SESSION['role'] === 'admin'): ?>
+                    <th>Role</th>
                     <th>Actions</th>
                 <?php endif; ?>
             </tr>
@@ -38,9 +41,11 @@ $result = $stmt->get_result();
                     <td><?= $row['id']; ?></td>
                     <td><?= htmlspecialchars($row['name']); ?></td>
                     <td><?= htmlspecialchars($row['email']); ?></td>
-                    <td><?= htmlspecialchars($row['emp_desc']); ?></td>
-                    <td><?= $row['role']; ?></td>
+                    <td><?= htmlspecialchars($row['gender']); ?></td>
+                    <td><?= htmlspecialchars($row['date_of_birth']); ?></td>
+                    
                     <?php if ($_SESSION['role'] === 'admin'): ?>
+                        <td><?= $row['role']; ?></td>
                         <td>
                             <a href="edit.php?id=<?= $row['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
                             <a href="delete.php?id=<?= $row['id']; ?>" class="btn btn-sm btn-danger" 
@@ -48,10 +53,17 @@ $result = $stmt->get_result();
                         </td>
                     <?php endif; ?>
                 </tr>
+                
             <?php endwhile; ?>
         </tbody>
     </table>
+    <div class="d-flex justify-content-between">
     <a href="index.php" class="btn btn-primary">Back to Dashboard</a>
+    <?php if ($_SESSION['role'] === 'admin'): ?>
+        <a href= "add.php" class="btn btn-success">Add User</a>                  
+                    <?php endif; ?>
+        </div>
+   
 </div>
 
 <?php include 'templates/footer.php'; ?>

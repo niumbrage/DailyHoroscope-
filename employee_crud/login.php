@@ -42,7 +42,7 @@ if (isset($_POST['login'])) {
             <input type="password" class="form-control" id="password" name="password" required>
         </div>
         <button type="submit" name="login" class="btn btn-primary">Login</button>
-        <a href="register.php" class="btn btn-link">Register as a User</a>
+        <a href="register.php" class="btn btn-link">Don't have an account?</a>
     </form>
 </div>
 
