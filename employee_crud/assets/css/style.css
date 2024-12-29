@@ -1,20 +1,114 @@
 /* Global styling for the application */
-body {
-    background-color: #f8f9fa; /* Light gray background */
+
+
+.navbar {
+    background-image: url('../background/logo.png'); 
+    background-size: 250px ; 
+    background-position: left center;
+    background-repeat: no-repeat; 
+}
+
+.navbar-brand{
+    color: rgba(0, 0, 0, 0); 
+}
+
+.navbar-brand:hover{
+    color: rgba(0, 0, 0, 0);
+}
+
+
+ body {
+    /* background-color: #f8f9fa ; Light gray background */
+    background-image: url('../background/bg.jpg');
     font-family: 'Arial', sans-serif;
+        height: 100%; /* Ensure that the body takes the full height */
+        margin: 0; /* Remove default margin */
+        display: flex;
+        flex-direction: column;
+}
+
+.wrapper {
+flex: 1;
+display: flex;
+flex-direction: column;
 }
 
 .container {
-    max-width: 800px;
-    margin-top: 50px;
-    background: #ffffff;
+    max-width: 1000px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    padding-bottom: 25px;
+    background: #f8f9faef;
+    box-shadow: 0 0px 8px rgba(36, 22, 22, 0.411);
+    border-radius: 10px;
+    animation: appear 1s ease-out;
+}
+
+.parent-container {
+    display: flex;                
+    justify-content: center;      
+    align-items: center;         
+    margin: 0px;      
+    height: auto;              
+}
+
+.zodiac-container {
+    margin-bottom: 50px; /* Add units to the margin */
+      /* Ensure flex properties work */
+    flex-direction: column;      
+    justify-content: center;      
+    align-items: center;         
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;               
+    text-align: center;           
+    background: #f8f9fa;
+    box-shadow: 0 0px 8px rgba(36, 22, 22, 0.411);
+    border-radius: 10px;
+    
+    /* Apply animation properties */
+    animation: appear 1s ease-out; /* Define animation name, duration, and timing */
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: scale(0.5); /* Corrected scale */
+    }
+    to {
+        opacity: 1;
+        transform: scale(1); /* Corrected scale */
+    }
+}
+
+
+.zodiac-details img {
+    align-self: center;      
+    max-width: 200px;        
+    height: auto;           
+    margin-bottom: 20px; 
+    padding: 10px;
+    border-color: #343a40;
+}
+
+.zodiac-details p {
+    margin-bottom: 10px;    
+    text-align: left; 
+}
+
+
+.custom-container {
+    max-width: 800px;
+    margin-top: 0px;
+    padding: 20px;
     border-radius: 10px;
 }
 
-h1, h2 {
-    color: #343a40;
+
+
+h1, h2, p{
+    color: #403434;
+    font-family: cursive;
 }
 
 .btn-primary, .btn-success, .btn-danger, .btn-secondary, .btn-warning {

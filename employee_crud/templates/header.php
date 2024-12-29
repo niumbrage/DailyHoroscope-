@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Horoscope</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
     <script src="assets/bootstrap/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark custom-navbar">
     <div class="container-fluid">
-        <a class="navbar-brand" href="index.php">Horoscope</a>
+        <a class="navbar-brand" href="index.php">Horoscope                                                        Horoscope</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ms-auto">
                 <?php if (isset($_SESSION['email'])): ?>

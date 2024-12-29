@@ -70,21 +70,24 @@ $stmt->execute();
 $zodiac_details = $stmt->get_result()->fetch_assoc();
 ?>
 
-<div class="container custom-container mt-5">
-
+<div class="custom-container">
     <h1>Welcome, <?= htmlspecialchars($user['name']); ?>!</h1>
-    <h2>Your Zodiac Sign: <?= $zodiac_sign; ?></h2>
-    
-    <?php if ($zodiac_details): ?>
-        <div class="zodiac-details mt-4">
-            <img src="<?= htmlspecialchars($zodiac_details['image']); ?>" alt="<?= htmlspecialchars($zodiac_sign); ?>" class="img-fluid" style="max-width: 200px;">
-            <p><strong>Description:</strong> <?= htmlspecialchars($zodiac_details['description']); ?></p>
-            <p><strong>Today's Horoscope:</strong> <?= htmlspecialchars($zodiac_details['daily_horoscope']); ?></p>
-            <p><strong>Monthly Horoscope:</strong> <?= htmlspecialchars($zodiac_details['monthly_horoscope']); ?></p>
-        </div>
-    <?php else: ?>
-        <p>Details for your zodiac sign are not available at the moment.</p>
-    <?php endif; ?>
+</div>
+
+<div class="parent-container mt-5">
+    <div class="zodiac-container mt-5">
+        <h2>Your Zodiac Sign: <?= $zodiac_sign; ?></h2>
+        <?php if ($zodiac_details): ?>
+            <div class="zodiac-details mt-4">
+                <img src="<?= htmlspecialchars($zodiac_details['image']); ?>" alt="<?= htmlspecialchars($zodiac_sign); ?>" class="img-fluid" style="max-width: 200px;">
+                <p><strong>Description:</strong> <?= htmlspecialchars($zodiac_details['description']); ?></p>
+                <p><strong>Today's Horoscope:</strong> <?= htmlspecialchars($zodiac_details['daily_horoscope']); ?></p>
+                <p><strong>Monthly Horoscope:</strong> <?= htmlspecialchars($zodiac_details['monthly_horoscope']); ?></p>
+            </div>
+        <?php else: ?>
+            <p>Details for your zodiac sign are not available at the moment.</p>
+        <?php endif; ?>
+    </div>
 </div>
 
 <?php include 'templates/footer.php'; ?>
