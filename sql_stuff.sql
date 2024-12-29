@@ -30,18 +30,18 @@ CREATE TABLE horoscopes (
 
 -- Sample data
 INSERT INTO zodiac_signs (name, date_range, description, image) VALUES
-('Aries', 'March 21 - April 19', 'Courageous, energetic, and determined.', 'assets/zodiac/aries.jpg'),
-('Taurus', 'April 20 - May 20', 'Reliable, patient, and practical.', 'assets/zodiac/taurus.jpg'),
-('Gemini', 'May 21 - June 20', 'Adaptable, outgoing, and intelligent.', 'assets/zodiac/gemini.jpg'),
-('Cancer', 'June 21 - July 22', 'Emotional, nurturing, and protective.', 'assets/zodiac/cancer.jpg'),
-('Leo', 'July 23 - August 22', 'Confident, passionate, and generous.', 'assets/zodiac/leo.jpg'),
-('Virgo', 'August 23 - September 22', 'Analytical, practical, and diligent.', 'assets/zodiac/virgo.jpg'),
-('Libra', 'September 23 - October 22', 'Charming, social, and diplomatic.', 'assets/zodiac/libra.jpg'),
-('Scorpio', 'October 23 - November 21', 'Intense, brave, and loyal.', 'assets/zodiac/scorpio.jpg'),
-('Sagittarius', 'November 22 - December 21', 'Optimistic, independent, and adventurous.', 'assets/zodiac/sagittarius.jpg'),
-('Capricorn', 'December 22 - January 19', 'Disciplined, responsible, and ambitious.', 'assets/zodiac/capricorn.jpg'),
-('Aquarius', 'January 20 - February 18', 'Innovative, progressive, and humanitarian.', 'assets/zodiac/aquarius.jpg'),
-('Pisces', 'February 19 - March 20', 'Compassionate, artistic, and intuitive.', 'assets/zodiac/pisces.jpg');
+('Aries', 'March 21 - April 19', 'Courageous, energetic, and determined.', 'assets/zodiac/aries.png'),
+('Taurus', 'April 20 - May 20', 'Reliable, patient, and practical.', 'assets/zodiac/taurus.png'),
+('Gemini', 'May 21 - June 20', 'Adaptable, outgoing, and intelligent.', 'assets/zodiac/gemini.png'),
+('Cancer', 'June 21 - July 22', 'Emotional, nurturing, and protective.', 'assets/zodiac/cancer.png'),
+('Leo', 'July 23 - August 22', 'Confident, passionate, and generous.', 'assets/zodiac/leo.png'),
+('Virgo', 'August 23 - September 22', 'Analytical, practical, and diligent.', 'assets/zodiac/virgo.png'),
+('Libra', 'September 23 - October 22', 'Charming, social, and diplomatic.', 'assets/zodiac/libra.png'),
+('Scorpio', 'October 23 - November 21', 'Intense, brave, and loyal.', 'assets/zodiac/scorpio.png'),
+('Sagittarius', 'November 22 - December 21', 'Optimistic, independent, and adventurous.', 'assets/zodiac/sagittarius.png'),
+('Capricorn', 'December 22 - January 19', 'Disciplined, responsible, and ambitious.', 'assets/zodiac/capricorn.png'),
+('Aquarius', 'January 20 - February 18', 'Innovative, progressive, and humanitarian.', 'assets/zodiac/aquarius.png'),
+('Pisces', 'February 19 - March 20', 'Compassionate, artistic, and intuitive.', 'assets/zodiac/pisces.png');
 
 INSERT INTO horoscopes (zodiac_id, daily_horoscope, monthly_horoscope, created_at) VALUES
 (1, 'Today is a great day to take risks.', 'This month brings new opportunities.', CURDATE()),
