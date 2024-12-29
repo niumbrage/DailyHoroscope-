@@ -3,7 +3,14 @@ THIS IS SPECIFICALLY FOR TESTING
 Name
 Email
 Password
+Role
 
 Maxine S.
 sargentomaxine@gmail.com
 12345
+User
+
+Admin
+admin@gmail.com
+54321
+Admin
