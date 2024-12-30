@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $update_stmt->bind_param('issi', $zodiac_id, $value, $text, $id);
 
     if ($update_stmt->execute()) {
-        header("Location: index.php");
+        header("Location: add_horoscope.php");
         exit();
     } else {
         echo "<p>Failed to update horoscope.</p>";
