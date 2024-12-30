@@ -9,21 +9,24 @@ if ($_SESSION['role'] !== 'admin') {
     exit();
 }
 
-// Fetch zodiac signs
-$stmt = $conn->prepare("SELECT id, name FROM zodiac_signs");
-$stmt->execute();
-$zodiac_signs = $stmt->get_result();
+// Fetch all daily and monthly horoscopes
+$daily_horoscopes = $conn->query("SELECT dh.id, zs.name AS zodiac_name, dh.horoscope, dh.date 
+                                  FROM daily_horoscopes dh 
+                                  JOIN zodiac_signs zs ON dh.zodiac_id = zs.id");
+$monthly_horoscopes = $conn->query("SELECT mh.id, zs.name AS zodiac_name, mh.horoscope, mh.month 
+                                    FROM monthly_horoscopes mh 
+                                    JOIN zodiac_signs zs ON mh.zodiac_id = zs.id");
 
-// Handle form submissions
+// Handle form submissions (for adding new horoscopes)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $zodiac_id = $_POST['zodiac_id'];
     $horoscope = $_POST['horoscope'];
 
-    if (isset($_POST['type']) && $_POST['type'] === 'daily') {
+    if ($_POST['type'] === 'daily') {
         $date = $_POST['date'];
         $stmt = $conn->prepare("INSERT INTO daily_horoscopes (zodiac_id, horoscope, date) VALUES (?, ?, ?)");
         $stmt->bind_param("iss", $zodiac_id, $horoscope, $date);
-    } elseif (isset($_POST['type']) && $_POST['type'] === 'monthly') {
+    } elseif ($_POST['type'] === 'monthly') {
         $month = $_POST['month'];
         $stmt = $conn->prepare("INSERT INTO monthly_horoscopes (zodiac_id, horoscope, month) VALUES (?, ?, ?)");
         $stmt->bind_param("iss", $zodiac_id, $horoscope, $month);
@@ -38,16 +41,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <div class="container mt-5">
-    <h1>Add Horoscope</h1>
+    <h1>Manage Horoscopes</h1>
     <?php if (!empty($message)): ?>
         <div class="alert alert-info"><?= $message; ?></div>
     <?php endif; ?>
 
-    <form method="POST">
+    <!-- Form for Adding Horoscope -->
+    <form method="POST" class="mb-5">
         <div class="mb-3">
             <label for="zodiac_id" class="form-label">Zodiac Sign</label>
             <select name="zodiac_id" id="zodiac_id" class="form-control" required>
-                <?php while ($row = $zodiac_signs->fetch_assoc()): ?>
+                <?php
+                $zodiac_stmt = $conn->prepare("SELECT id, name FROM zodiac_signs");
+                $zodiac_stmt->execute();
+                $zodiac_signs = $zodiac_stmt->get_result();
+
+                while ($row = $zodiac_signs->fetch_assoc()):
+                ?>
                     <option value="<?= $row['id']; ?>"><?= htmlspecialchars($row['name']); ?></option>
                 <?php endwhile; ?>
             </select>
@@ -73,11 +83,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <button type="submit" class="btn btn-primary">Add Horoscope</button>
     </form>
-    <div class="d-flex justify-content-between">
-        <a href="index.php" class="btn btn-secondary mt-3">Back to Dashboard</a>
-        <a href="edit_horoscope.php" class="btn btn-warning mt-3">Edit Horoscope</a>
-        <a href="delete_horoscope.php" class="btn btn-danger mt-3">Delete Horoscope</a>
-    </div>
+
+    <!-- List of Daily Horoscopes -->
+    <h2>Daily Horoscopes</h2>
+    <ul class="list-group mb-5">
+        <?php while ($row = $daily_horoscopes->fetch_assoc()): ?>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <?= htmlspecialchars($row['zodiac_name'] . " - " . $row['date'] . ": " . $row['horoscope']); ?>
+                <div>
+                    <a href="edit_horoscope.php?type=daily&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="delete_horoscope.php?type=daily&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm">Delete</a>
+                </div>
+            </li>
+        <?php endwhile; ?>
+    </ul>
+
+    <!-- List of Monthly Horoscopes -->
+    <h2>Monthly Horoscopes</h2>
+    <ul class="list-group">
+        <?php while ($row = $monthly_horoscopes->fetch_assoc()): ?>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <?= htmlspecialchars($row['zodiac_name'] . " - " . $row['month'] . ": " . $row['horoscope']); ?>
+                <div>
+                    <a href="edit_horoscope.php?type=monthly&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="delete_horoscope.php?type=monthly&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm">Delete</a>
+                </div>
+            </li>
+        <?php endwhile; ?>
+    </ul>
 </div>
 
 <script>
