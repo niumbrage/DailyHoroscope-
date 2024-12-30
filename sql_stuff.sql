@@ -28,11 +28,12 @@ CREATE TABLE daily_horoscopes (
     FOREIGN KEY (zodiac_id) REFERENCES zodiac_signs(id)
 );
 
+-- Fixed
 CREATE TABLE monthly_horoscopes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     zodiac_id INT NOT NULL,
     horoscope TEXT NOT NULL,
-    month YEAR(4) NOT NULL,
+    month DATE NOT NULL, -- Changed from YEAR(4) to DATE
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (zodiac_id) REFERENCES zodiac_signs(id)
 );
@@ -66,16 +67,17 @@ INSERT INTO daily_horoscopes (zodiac_id, horoscope, date) VALUES
 (11, 'Aquarius, today you will have innovative ideas. Trust your instincts and think outside the box.', '2024-12-30'),
 (12, 'Pisces, it''s a good day for self-reflection. Take some time to meditate or engage in creative activities.', '2024-12-30');
 
+--Fixed
 INSERT INTO monthly_horoscopes (zodiac_id, horoscope, month) VALUES
-(1, 'Aries, this month you will experience a breakthrough in your career. Be open to new opportunities.', 202412),
-(2, 'Taurus, focus on building deeper connections with your loved ones this month. Communication is key.', 202412),
-(3, 'Gemini, this is a month for personal growth. Explore new hobbies and learn something new.', 202412),
-(4, 'Cancer, you will feel the need to take care of yourself this month. It''s a good time for self-care.', 202412), 
-(5, 'Leo, your energy will be contagious this month. Take the lead and inspire others.', 202412),
-(6, 'Virgo, your attention to detail will pay off this month, especially in your professional life.', 202412),
-(7, 'Libra, it''s a good month to focus on balance in your life. Find time for both work and relaxation.', 202412),
-(8, 'Scorpio, expect deep emotional connections this month. You may form a meaningful bond with someone.', 202412),
-(9, 'Sagittarius, this month will bring excitement. Plan an adventurous trip or take a risk.', 202412),
-(10, 'Capricorn, your ambition will drive you this month. Work hard, and success will follow.', 202412),
-(11, 'Aquarius, new ideas will flow this month. Collaborate with others to bring your visions to life.', 202412),
-(12, 'Pisces, creativity will be your strength this month. Use it to bring joy and inspiration to others.', 202412);
+(1, 'Aries, this month you will experience a breakthrough in your career. Be open to new opportunities.', '2024-12-01'),
+(2, 'Taurus, focus on building deeper connections with your loved ones this month. Communication is key.', '2024-12-01'),
+(3, 'Gemini, this is a month for personal growth. Explore new hobbies and learn something new.', '2024-12-01'),
+(4, 'Cancer, you will feel the need to take care of yourself this month. It''s a good time for self-care.', '2024-12-01'), 
+(5, 'Leo, your energy will be contagious this month. Take the lead and inspire others.', '2024-12-01'),
+(6, 'Virgo, your attention to detail will pay off this month, especially in your professional life.', '2024-12-01'),
+(7, 'Libra, it''s a good month to focus on balance in your life. Find time for both work and relaxation.', '2024-12-01'),
+(8, 'Scorpio, expect deep emotional connections this month. You may form a meaningful bond with someone.', '2024-12-01'),
+(9, 'Sagittarius, this month will bring excitement. Plan an adventurous trip or take a risk.', '2024-12-01'),
+(10, 'Capricorn, your ambition will drive you this month. Work hard, and success will follow.', '2024-12-01'),
+(11, 'Aquarius, new ideas will flow this month. Collaborate with others to bring your visions to life.', '2024-12-01'),
+(12, 'Pisces, creativity will be your strength this month. Use it to bring joy and inspiration to others.', '2024-12-01');
