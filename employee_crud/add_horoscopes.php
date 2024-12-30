@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $conn->prepare("INSERT INTO daily_horoscopes (zodiac_id, horoscope, date) VALUES (?, ?, ?)");
         $stmt->bind_param("iss", $zodiac_id, $horoscope, $date);
     } elseif ($_POST['type'] === 'monthly') {
-        $month = $_POST['month'];
+        $month = $_POST['month'] . '-01'; // Convert YYYY-MM to YYYY-MM-DD
         $stmt = $conn->prepare("INSERT INTO monthly_horoscopes (zodiac_id, horoscope, month) VALUES (?, ?, ?)");
         $stmt->bind_param("iss", $zodiac_id, $horoscope, $month);
     }
@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div id="monthly-fields" class="mb-3" style="display: none;">
             <label for="month" class="form-label">Month</label>
-            <input type="month" name="month" id="month" class="form-control">
+            <input type="month" name="month" id="month" class="form-control" required>
         </div>
         <button type="submit" class="btn btn-primary">Add Horoscope</button>
     </form>
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <ul class="list-group">
         <?php while ($row = $monthly_horoscopes->fetch_assoc()): ?>
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                <?= htmlspecialchars($row['zodiac_name'] . " - " . $row['month'] . ": " . $row['horoscope']); ?>
+                <?= htmlspecialchars($row['zodiac_name'] . " - " . date('Y-m', strtotime($row['month'])) . ": " . $row['horoscope']); ?>
                 <div>
                     <a href="edit_horoscope.php?type=monthly&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                     <a href="delete_horoscope.php?type=monthly&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm">Delete</a>
@@ -116,8 +116,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <script>
 document.querySelectorAll('input[name="type"]').forEach(input => {
     input.addEventListener('change', () => {
-        document.getElementById('daily-fields').style.display = input.value === 'daily' ? 'block' : 'none';
-        document.getElementById('monthly-fields').style.display = input.value === 'monthly' ? 'block' : 'none';
+        const dailyFields = document.getElementById('daily-fields');
+        const monthlyFields = document.getElementById('monthly-fields');
+        
+        if (input.value === 'daily') {
+            dailyFields.style.display = 'block';
+            monthlyFields.style.display = 'none';
+            document.getElementById('month').disabled = true; // Disable month input when not shown
+        } else {
+            dailyFields.style.display = 'none';
+            monthlyFields.style.display = 'block';
+            document.getElementById('month').disabled = false; // Enable month input when shown
+        }
     });
 });
 </script>
