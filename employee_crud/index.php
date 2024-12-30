@@ -60,42 +60,87 @@ function getZodiacSign($date_of_birth) {
 // Determine zodiac sign
 $zodiac_sign = getZodiacSign($user['date_of_birth']);
 
-// Fetch all horoscopes for the zodiac sign, ordered by creation date
-$query = "
-    SELECT horoscopes.daily_horoscope, horoscopes.monthly_horoscope, horoscopes.created_at, zodiac_signs.description, zodiac_signs.image
-    FROM zodiac_signs
-    JOIN horoscopes ON zodiac_signs.id = horoscopes.zodiac_id
-    WHERE zodiac_signs.name = ?
-    ORDER BY horoscopes.created_at ASC
+// Fetch zodiac details
+$zodiac_query = "SELECT description, image FROM zodiac_signs WHERE name = ?";
+$zodiac_stmt = $conn->prepare($zodiac_query);
+$zodiac_stmt->bind_param("s", $zodiac_sign);
+$zodiac_stmt->execute();
+$zodiac_details = $zodiac_stmt->get_result()->fetch_assoc();
+
+// Fetch today's horoscope
+$current_date = (new DateTime())->format('Y-m-d');
+
+// First, try to fetch today's horoscope
+$daily_query = "
+    SELECT horoscope 
+    FROM daily_horoscopes 
+    WHERE zodiac_id = (SELECT id FROM zodiac_signs WHERE name = ?) 
+    AND date = ?
+    ORDER BY date DESC LIMIT 1
 ";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("s", $zodiac_sign);
-$stmt->execute();
-$horoscopes = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+$daily_stmt = $conn->prepare($daily_query);
+$daily_stmt->bind_param("ss", $zodiac_sign, $current_date);
+$daily_stmt->execute();
+$daily_result = $daily_stmt->get_result();
+$daily_horoscope = $daily_result->fetch_assoc()['horoscope'] ?? null;
 
-$current_date = new DateTime();
-$daily_horoscope = null;
-$monthly_horoscope = null;
-
-// Cycle through horoscopes
-foreach ($horoscopes as $horoscope) {
-    $horoscope_date = new DateTime($horoscope['created_at']);
-    if ($current_date >= $horoscope_date) {
-        $daily_horoscope = $horoscope['daily_horoscope'];
-        $monthly_horoscope = $horoscope['monthly_horoscope'];
-    }
-}
-
-// If no matching horoscope is found, cycle back to the first
+// If no horoscope for today, fetch the most recent one available
 if (!$daily_horoscope) {
-    $daily_horoscope = $horoscopes[0]['daily_horoscope'];
-    $monthly_horoscope = $horoscopes[0]['monthly_horoscope'];
-    $zodiac_description = $horoscopes[0]['description'];
-    $zodiac_image = $horoscopes[0]['image'];
-} else {
-    $zodiac_description = $horoscope['description'];
-    $zodiac_image = $horoscope['image'];
+    $fallback_query = "
+        SELECT horoscope 
+        FROM daily_horoscopes 
+        WHERE zodiac_id = (SELECT id FROM zodiac_signs WHERE name = ?) 
+        ORDER BY date DESC LIMIT 1
+    ";
+    $fallback_stmt = $conn->prepare($fallback_query);
+    $fallback_stmt->bind_param("s", $zodiac_sign);
+    $fallback_stmt->execute();
+    $fallback_result = $fallback_stmt->get_result();
+    $daily_horoscope = $fallback_result->fetch_assoc()['horoscope'] ?? 'No horoscope available at this time.';
 }
+
+// Debugging log to check the fallback mechanism
+error_log("Final Daily Horoscope: " . $daily_horoscope);
+
+// Debugging statement
+error_log("Daily Horoscope Query: " . $daily_stmt->error);
+error_log("Daily Horoscope Result: " . print_r($daily_horoscope, true));
+
+// Fetch this month's horoscope
+$current_month = (new DateTime())->format('Y-m-01'); // Format as YYYY-MM-DD for compatibility
+
+// First, try to fetch the horoscope for the current month
+$monthly_query = "
+    SELECT horoscope 
+    FROM monthly_horoscopes 
+    WHERE zodiac_id = (SELECT id FROM zodiac_signs WHERE name = ?) 
+    AND DATE_FORMAT(month, '%Y-%m-01') = ?
+    LIMIT 1
+";
+$monthly_stmt = $conn->prepare($monthly_query);
+$monthly_stmt->bind_param("ss", $zodiac_sign, $current_month);
+$monthly_stmt->execute();
+$monthly_result = $monthly_stmt->get_result();
+$monthly_horoscope = $monthly_result->fetch_assoc()['horoscope'] ?? null;
+
+// If no horoscope for the current month, fetch the most recent one available
+if (!$monthly_horoscope) {
+    $fallback_monthly_query = "
+        SELECT horoscope 
+        FROM monthly_horoscopes 
+        WHERE zodiac_id = (SELECT id FROM zodiac_signs WHERE name = ?) 
+        ORDER BY month DESC 
+        LIMIT 1
+    ";
+    $fallback_monthly_stmt = $conn->prepare($fallback_monthly_query);
+    $fallback_monthly_stmt->bind_param("s", $zodiac_sign);
+    $fallback_monthly_stmt->execute();
+    $fallback_monthly_result = $fallback_monthly_stmt->get_result();
+    $monthly_horoscope = $fallback_monthly_result->fetch_assoc()['horoscope'] ?? 'No monthly horoscope available at this time.';
+}
+
+// Debugging log to check the fallback mechanism
+error_log("Final Monthly Horoscope: " . $monthly_horoscope);
 
 ?>
 
@@ -107,8 +152,8 @@ if (!$daily_horoscope) {
     <div class="zodiac-container mt-5">
         <h2>Your Zodiac Sign: <?= htmlspecialchars($zodiac_sign); ?></h2>
         <div class="zodiac-details mt-4">
-            <img src="<?= htmlspecialchars($zodiac_image); ?>" alt="<?= htmlspecialchars($zodiac_sign); ?>" class="img-fluid" style="max-width: 200px;">
-            <p><strong>Description:</strong> <?= htmlspecialchars($zodiac_description); ?></p>
+            <img src="<?= htmlspecialchars($zodiac_details['image']); ?>" alt="<?= htmlspecialchars($zodiac_sign); ?>" class="img-fluid" style="max-width: 200px;">
+            <p><strong>Description:</strong> <?= htmlspecialchars($zodiac_details['description']); ?></p>
             <p><strong>Today's Horoscope:</strong> <?= htmlspecialchars($daily_horoscope); ?></p>
             <p><strong>Monthly Horoscope:</strong> <?= htmlspecialchars($monthly_horoscope); ?></p>
         </div>
@@ -119,7 +164,7 @@ if (!$daily_horoscope) {
     <div class="d-flex justify-content-between">
         <a href="viewuser.php" class="btn btn-primary">Manage Users</a>
         <a href="add.php" class="btn btn-success">Add New User</a>
-        <a href="add_horoscope.php" class="btn btn-warning">Add New Horoscope</a>
+        <a href="add_horoscope.php" class="btn btn-warning">Manage Horoscopes</a>
     </div>
 <?php endif; ?>
 
