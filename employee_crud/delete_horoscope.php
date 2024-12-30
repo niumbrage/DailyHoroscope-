@@ -26,7 +26,7 @@ $stmt = $conn->prepare("DELETE FROM $table WHERE id = ?");
 $stmt->bind_param('i', $id);
 
 if ($stmt->execute()) {
-    header("Location: index.php");
+    header("Location: add_horoscope.php");
     exit();
 } else {
     echo "<p>Failed to delete horoscope.</p>";
