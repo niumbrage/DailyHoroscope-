@@ -33,6 +33,14 @@ display: flex;
 flex-direction: column;
 }
 
+.row {
+    height: 100vh; /* Full viewport height */
+}
+.col-md-6 {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
 .container {
     max-width: 1000px;
     margin-top: 25px;
@@ -45,27 +53,26 @@ flex-direction: column;
 }
 
 .parent-container {
-    display: flex;                
-    justify-content: center;      
-    align-items: center;         
-    margin: 0px;      
-    height: auto;              
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch; /* Ensure it stretches fully */
+    flex-grow: 1; /* Take up remaining space */
+    margin: 0; /* Remove margins if necessary */
+    padding: 0;    
 }
 
 .zodiac-container {
-    margin-bottom: 50px; /* Add units to the margin */
-      /* Ensure flex properties work */
-    flex-direction: column;      
-    justify-content: center;      
-    align-items: center;         
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Adjust inner content layout */
+    flex-grow: 1; /* Ensure it stretches to fill available space */
     padding: 20px;
-    max-width: 600px;
-    width: 100%;               
-    text-align: center;           
+    text-align: center;
     background: #f8f9fa;
     box-shadow: 0 0px 8px rgba(36, 22, 22, 0.411);
     border-radius: 10px;
-    
+    height: 100%; /* Ensure full height */
+    min-height: 100%; /* Prevent shrinkage */
     /* Apply animation properties */
     animation: appear 1s ease-out; /* Define animation name, duration, and timing */
 }
@@ -92,6 +99,7 @@ flex-direction: column;
 }
 
 .zodiac-details p {
+
     margin-bottom: 10px;    
     text-align: left; 
 }
@@ -104,6 +112,22 @@ flex-direction: column;
     border-radius: 10px;
 }
 
+.text-container {
+    max-width: 70%; /* Adjust as needed */
+    word-wrap: break-word;
+    white-space: normal;
+    overflow: hidden;
+}
+
+.button-container {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.list-group-item {
+    display: flex;
+    align-items: center;
+}
 
 
 h1, h2, p{
@@ -111,8 +135,33 @@ h1, h2, p{
     font-family: cursive;
 }
 
-.btn-primary, .btn-success, .btn-danger, .btn-secondary, .btn-warning {
+/*Button*/
+.btn-primary, btn-primary:active {
     margin-right: 10px;
+    background-color: #403434;
+    border: #403434;
+}
+
+.btn-primary:hover {
+    background-color: rgb(99, 98, 98);
+}
+
+.btn-primary:active {
+    background-color: #403434;
+    border: #403434;
+}
+
+
+.btn-danger {
+    margin-right: 10px;
+    background-color: #0c1824;
+    border: #0c1824;
+}
+
+.btn-warning {
+    margin-right: 10px;
+    background-color: #f2e0a9;
+    border: #f2e0a9;
 }
 
 footer {

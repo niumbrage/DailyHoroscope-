@@ -144,26 +144,38 @@ error_log("Final Monthly Horoscope: " . $monthly_horoscope);
 
 ?>
 
-<div class="custom-container">
-    <h1>Welcome, <?= htmlspecialchars($user['name']); ?>!</h1>
-</div>
-
-<div class="parent-container mt-5">
-    <div class="zodiac-container mt-5">
-        <h2>Your Zodiac Sign: <?= htmlspecialchars($zodiac_sign); ?></h2>
-        <div class="zodiac-details mt-4">
-            <img src="<?= htmlspecialchars($zodiac_details['image']); ?>" alt="<?= htmlspecialchars($zodiac_sign); ?>" class="img-fluid" style="max-width: 200px;">
-            <p><strong>Description:</strong> <?= htmlspecialchars($zodiac_details['description']); ?></p>
-            <p><strong>Today's Horoscope:</strong> <?= htmlspecialchars($daily_horoscope); ?></p>
-            <p><strong>Monthly Horoscope:</strong> <?= htmlspecialchars($monthly_horoscope); ?></p>
+<div class="row">
+    <div class="col-md-6">
+        <div class="custom-container">
+            <h1>Welcome, <?= htmlspecialchars($user['name']); ?>!</h1>
+        </div>
+        <div class="parent-container mt-2">
+            <div class="zodiac-container ">
+                <h2>Your Zodiac Sign: <?= htmlspecialchars($zodiac_sign); ?></h2>
+                <div class="zodiac-details mt-4">
+                    <img src="<?= htmlspecialchars($zodiac_details['image']); ?>" alt="<?= htmlspecialchars($zodiac_sign); ?>" class="img-fluid" style="max-width: 200px;">
+                    <p><strong>Description:</strong> <?= htmlspecialchars($zodiac_details['description']); ?></p>
+                    <p><strong>Today's Horoscope:</strong> <?= htmlspecialchars($daily_horoscope); ?></p>
+                    <p><strong>Monthly Horoscope:</strong> <?= htmlspecialchars($monthly_horoscope); ?></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="custom-container">
+            <h1> Maps </h1>
+        </div>
+        <div class="row">
+            <div id="map" style="height: 400px; margin-top: 20px;"></div>
+        </div>
+        <div class="custom-container">
+            <h1> Calendar </h1>
+        </div>
+        <div class="row">
+            <iframe id="calendar-iframe" style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
         </div>
     </div>
 </div>
-
-<div id="map" style="height: 400px; margin-top: 20px;"></div>
-
-<iframe id="calendar-iframe" style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
-
 <?php if ($_SESSION['role'] === 'admin'): ?>
     <div class="d-flex justify-content-between">
         <a href="viewuser.php" class="btn btn-primary">Manage Users</a>
