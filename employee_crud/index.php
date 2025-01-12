@@ -197,14 +197,15 @@ error_log("Final Monthly Horoscope: " . $monthly_horoscope);
 
     function setCalendarIframe() {
         var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        var calendarUrl = "https://calendar.google.com/calendar/embed?src=557867628443-escsas0b6jj2v1h7ep2rgn2lln0elnh3.apps.googleusercontent.com&ctz=" + timezone;
+        console.log("Detected Timezone: " + timezone); // Log the detected timezone
+        var calendarUrl = "https://calendar.google.com/calendar/embed?src=your_calendar_id@group.calendar.google.com&ctz=" + timezone;
+        console.log("Generated Calendar URL: " + calendarUrl); // Log the URL
         document.getElementById('calendar-iframe').src = calendarUrl;
     }
 
     window.onload = function() {
-        initMap();
         setCalendarIframe();
     };
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTS262dMA6uCD2Wvm793obvR-1ODJRzf4&callback=initMap" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTS262dMA6uCD2Wvm793obvR-1ODJRzf4&loading=async&callback=initMap" async defer></script>
