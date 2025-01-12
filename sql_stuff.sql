@@ -6,7 +6,8 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     gender ENUM('Male', 'Female', 'Other') NOT NULL,
     date_of_birth DATE NOT NULL,
-    role ENUM('user', 'admin') DEFAULT 'user'
+    role ENUM('user', 'admin') DEFAULT 'user',
+    address varchar(255)
 );
 
 -- Create the zodiac_signs table
