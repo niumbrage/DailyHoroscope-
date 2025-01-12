@@ -5,3 +5,5 @@ AND THE MAP IS RESTRICTED TO WEBSITES UNDER http://localhost/horoscope/*
 asterisk means any of the pages within the folder
 
 ALSO UPDATE UR SQL DATABASE TO INCLUDE THE ADDRESS, I PUT IT IN SQL STUFF
+
+MESSAGE ME FOR THE API KEYS
