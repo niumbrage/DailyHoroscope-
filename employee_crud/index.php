@@ -11,7 +11,7 @@ if (!isset($_SESSION['email'])) {
 
 // Fetch user details
 $email = $_SESSION['email'];
-$query = "SELECT name, date_of_birth, role FROM users WHERE email = ?";
+$query = "SELECT name, date_of_birth, role, address FROM users WHERE email = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("s", $email);
 $stmt->execute();
@@ -160,6 +160,10 @@ error_log("Final Monthly Horoscope: " . $monthly_horoscope);
     </div>
 </div>
 
+<div id="map" style="height: 400px; margin-top: 20px;"></div>
+
+<iframe id="calendar-iframe" style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+
 <?php if ($_SESSION['role'] === 'admin'): ?>
     <div class="d-flex justify-content-between">
         <a href="viewuser.php" class="btn btn-primary">Manage Users</a>
@@ -169,3 +173,38 @@ error_log("Final Monthly Horoscope: " . $monthly_horoscope);
 <?php endif; ?>
 
 <?php include 'templates/footer.php'; ?>
+
+<script>
+    function initMap() {
+        var geocoder = new google.maps.Geocoder();
+        var address = "<?= htmlspecialchars($user['address']); ?>";
+
+        geocoder.geocode({'address': address}, function(results, status) {
+            if (status === 'OK') {
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 10,
+                    center: results[0].geometry.location
+                });
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location
+                });
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    }
+
+    function setCalendarIframe() {
+        var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        var calendarUrl = "https://calendar.google.com/calendar/embed?src=557867628443-escsas0b6jj2v1h7ep2rgn2lln0elnh3.apps.googleusercontent.com&ctz=" + timezone;
+        document.getElementById('calendar-iframe').src = calendarUrl;
+    }
+
+    window.onload = function() {
+        initMap();
+        setCalendarIframe();
+    };
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTS262dMA6uCD2Wvm793obvR-1ODJRzf4&callback=initMap" async defer></script>
