@@ -198,7 +198,7 @@ error_log("Final Monthly Horoscope: " . $monthly_horoscope);
     function setCalendarIframe() {
         var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         console.log("Detected Timezone: " + timezone); // Log the detected timezone
-        var calendarUrl = "https://calendar.google.com/calendar/embed?src=your_calendar_id@group.calendar.google.com&ctz=" + timezone; //add actual calendar id
+        var calendarUrl = "https://calendar.google.com/calendar/embed?src=557867628443-escsas0b6jj2v1h7ep2rgn2lln0elnh3.apps.googleusercontent.com@group.calendar.google.com&ctz=" + timezone;
         console.log("Generated Calendar URL: " + calendarUrl); // Log the URL
         document.getElementById('calendar-iframe').src = calendarUrl;
     }
@@ -208,4 +208,4 @@ error_log("Final Monthly Horoscope: " . $monthly_horoscope);
     };
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=google_api_key&loading=async&callback=initMap" async defer></script> //add actual api key
+<script src="https://maps.googleapis.com/maps/api/js?key=google_api_key&loading=async&callback=initMap" async defer></script> //DO NOT ADD ACTUAL API KEY IN THE GITHUB
